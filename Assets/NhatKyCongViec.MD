@@ -1,0 +1,1 @@
+#23h56 01/03/2025: đã làm cơ bản giao diện app, mai làm tiếp: sửa giao diện bảng điều khiển, các nút, tích hợp model 
