@@ -1,3 +1,3 @@
 # HandGesture Community Edition
 
-Project description here.
+- ## project up lên github đầy đủ dataset, dù lần đầu đẩy lên git đã tránh dataset vì quá nhiều nhưng đã lỡ up lên đầy đủ nên để nguyên dataset 
