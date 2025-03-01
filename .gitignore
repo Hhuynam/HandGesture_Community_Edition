@@ -1,0 +1,4 @@
+# .gitignore: bỏ qua ảnh vì quá nhiều trong folder Dataset
+Dataset/*.png
+Dataset/*.jpg
+Dataset/*.jpeg
