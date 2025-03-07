@@ -1,3 +1,4 @@
+#module_ui.py
 import tkinter as tk
 from PIL import Image, ImageTk
 import mediapipe as mp
@@ -69,7 +70,7 @@ class HandTrackingUI:
 
         self.canvas_feedback = tk.Canvas(self.frame_feedback, bg="lightblue")
         self.canvas_feedback.pack(padx=10, pady=10, fill="both", expand=True)
-
+        
     def adjust_volume(self):
         print("Adjusting Volume")
 
@@ -114,6 +115,20 @@ class HandTrackingUI:
     def update_gesture_info(self, gesture_name):
         self.label_gesture_info.config(text=f"Hệ thống nhận diện: {gesture_name}", font=("Arial", 12, "bold"))
 
+    def update_button_color(self, gesture_name):
+        """Cập nhật màu sắc của các nút điều khiển khi nhận diện cử chỉ"""
+        # Đặt lại màu nền các nút về mặc định
+        self.btn_volume.config(bg="white")
+        self.btn_brightness.config(bg="white")
+        self.btn_zoom.config(bg="white")
+
+        if gesture_name == "thumbs_up":
+            self.btn_volume.config(bg="red")  # Đổi màu nút Volume thành đỏ
+        elif gesture_name == "fist":
+            self.btn_brightness.config(bg="red")  # Đổi màu nút Brightness thành đỏ
+        elif gesture_name == "open_palm":
+            self.btn_zoom.config(bg="red")  # Đổi màu nút Zoom thành đỏ
+    
     def run(self, update_func):
         self.root.after(10, update_func)
         self.root.mainloop()

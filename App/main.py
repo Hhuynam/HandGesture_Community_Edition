@@ -1,10 +1,10 @@
+#main.py
 import cv2
 import module_hand_tracking
 import module_mouse_control
 import module_ui
 import pyautogui
 import numpy as np
-from module_model import new_model
 from module_gesture_recognition import predict_gesture, labels  # Nhận diện cử chỉ
 from module_brightness import BrightnessControl  # Điều chỉnh độ sáng
 from module_volume import VolumeControl  # Điều chỉnh âm lượng
@@ -76,16 +76,16 @@ def process_gesture_control(gesture_name, landmarks):
 
     # Khoảng cách giữa ngón cái và ngón trỏ để xác định mức thay đổi
     distance = ((index_tip.x - thumb_tip.x) ** 2 + (index_tip.y - thumb_tip.y) ** 2) ** 0.5
-
-    if gesture_name == "thumb":
+     # Cập nhật màu sắc nút khi nhận diện cử chỉ
+    ui.update_button_color(gesture_name)
+    
+    if gesture_name == "thumbs_up":
         volume_control.adjust_volume(distance)
     elif gesture_name == "fist":
         brightness_control.adjust_brightness(distance)
-    elif gesture_name == "open_hand":
+    elif gesture_name == "open_palm":
         zoom_control.adjust_zoom(distance)
 
-# Hiển thị kiến trúc model trước khi chạy chương trình
-new_model.summary()
 ui.run(update_video)
 cap.release()
 cv2.destroyAllWindows()
