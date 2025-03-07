@@ -12,6 +12,10 @@ class HandTrackingUI:
         self.root.rowconfigure(0, weight=1)
         self.root.rowconfigure(1, weight=1)
 
+        # Đặt icon cho ứng dụng
+        icon_path = r"D:\Project\HandGesture_Community_Edition\Assets\logo\hand_gesture_logo.ico"
+        self.root.iconbitmap(icon_path)
+
         # Frame chứa video
         self.frame_video = tk.Frame(self.root, bg="black", bd=2, relief="sunken")
         self.frame_video.grid(row=0, column=0, rowspan=4, padx=10, pady=10, sticky="nsew")
