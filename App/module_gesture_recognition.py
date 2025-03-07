@@ -21,7 +21,7 @@ def predict_gesture(image):
     
     try:
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Đảm bảo là ảnh RGB
-        image = cv2.resize(image, (64, 64))  # Resize về đúng kích thước model
+        image = cv2.resize(image, (256, 256))  # ✅ Resize đúng kích thước model yêu cầu
         image = np.expand_dims(image, axis=0) / 255.0  # Chuẩn hóa dữ liệu
         prediction = model.predict(image, verbose=0)[0]
         return labels[np.argmax(prediction)]

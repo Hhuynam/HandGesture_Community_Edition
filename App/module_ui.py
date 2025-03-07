@@ -6,7 +6,8 @@ class HandTrackingUI:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Hand Gesture Control")
-        self.root.geometry("860x550")
+        #self.root.geometry("860x550")
+        self.root.geometry("1200x800")
         self.root.columnconfigure(0, weight=3)
         self.root.columnconfigure(1, weight=1)
         self.root.rowconfigure(0, weight=1)
@@ -19,21 +20,30 @@ class HandTrackingUI:
         # Frame chứa video
         self.frame_video = tk.Frame(self.root, bg="black", bd=2, relief="sunken")
         self.frame_video.grid(row=0, column=0, rowspan=4, padx=10, pady=10, sticky="nsew")
-        
+
         self.label_video = tk.Label(self.frame_video, text="Video Feed", font=("Arial", 14, "bold"), bg="black", fg="white")
         self.label_video.pack(anchor="n", pady=5)
 
         self.canvas_video = tk.Canvas(self.frame_video, bg="black")
         self.canvas_video.pack(fill="both", expand=True)
 
-        # Frame chứa điều khiển
+        # Frame hướng dẫn user
+        self.frame_guiding = tk.Frame(self.root, bg="orange", bd=2, relief="sunken")
+        self.frame_guiding.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
+
+        self.label_guiding = tk.Label(self.frame_guiding, text="User Guiding", font=("Arial", 14, "bold"), bg="orange", fg="black")
+        self.label_guiding.pack(anchor="n", pady=5)
+
+        self.label_gesture_info = tk.Label(self.frame_guiding, text="Đang chờ nhận diện...", font=("Arial", 12), bg="orange", fg="black")
+        self.label_gesture_info.pack(pady=5)
+
+        # Frame điều khiển
         self.frame_control_panel = tk.Frame(self.root, bg="lightgreen", bd=2, relief="sunken")
-        self.frame_control_panel.grid(row=0, column=1, rowspan=2, padx=10, pady=10, sticky="nsew")
+        self.frame_control_panel.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
         self.label_control_panel = tk.Label(self.frame_control_panel, text="Control Panel", font=("Arial", 14, "bold"), bg="lightgreen", fg="black")
         self.label_control_panel.pack(anchor="n", pady=5)
 
-        # Thêm các nút chức năng
         self.btn_volume = tk.Button(self.frame_control_panel, text="Volume", font=("Arial", 12), bg="white", fg="black", command=self.adjust_volume)
         self.btn_volume.pack(pady=5, padx=10, fill="x")
 
@@ -80,12 +90,10 @@ class HandTrackingUI:
     
         width, height = self.canvas_feedback.winfo_width(), self.canvas_feedback.winfo_height()
     
-        # Vẽ các điểm landmark
         for lm in hand_landmarks.landmark:
             lx, ly = int(lm.x * width), int(lm.y * height)
             self.canvas_feedback.create_oval(lx-4, ly-4, lx+4, ly+4, fill="red")
 
-        # Tô đậm đầu ngón trỏ
         index_tip = hand_landmarks.landmark[mp.solutions.hands.HandLandmark.INDEX_FINGER_TIP]
         self.canvas_feedback.create_oval(int(index_tip.x * width) - 6,
                                          int(index_tip.y * height) - 6,
@@ -93,7 +101,6 @@ class HandTrackingUI:
                                          int(index_tip.y * height) + 6,
                                          fill="yellow")
 
-        # Vẽ kết nối giữa các điểm
         for connection in mp.solutions.hands.HAND_CONNECTIONS:
             start_idx, end_idx = connection
             start = hand_landmarks.landmark[start_idx]
@@ -103,6 +110,9 @@ class HandTrackingUI:
             ex, ey = int(end.x * width), int(end.y * height)
 
             self.canvas_feedback.create_line(sx, sy, ex, ey, fill="white", width=2)
+
+    def update_gesture_info(self, gesture_name):
+        self.label_gesture_info.config(text=f"Hệ thống nhận diện: {gesture_name}", font=("Arial", 12, "bold"))
 
     def run(self, update_func):
         self.root.after(10, update_func)
