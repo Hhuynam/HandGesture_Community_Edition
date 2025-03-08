@@ -1,3 +1,4 @@
+#module_brightness.py
 import screen_brightness_control as sbc
 
 class BrightnessControl:

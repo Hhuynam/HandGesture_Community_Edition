@@ -24,4 +24,4 @@ class HandTracker:
                 mp_hands.HandLandmark.PINKY_PIP]
         
         count = sum(1 for tip, pip in zip(tips, pips) if hand_landmarks.landmark[tip].y < hand_landmarks.landmark[pip].y)
-        return count == 5
+        return count == 5 
