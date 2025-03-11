@@ -4,10 +4,10 @@ import module_mouse_control
 import module_ui
 import pyautogui
 import numpy as np
-from module_gesture_recognition import predict_gesture
-from module_brightness import BrightnessControl
-from module_volume import VolumeControl
-from module_zoom import ZoomControl
+from module_gesture_recognition import predict_gesture, labels  # Nhận diện cử chỉ
+from module_brightness import BrightnessControl  # Điều chỉnh độ sáng
+from module_volume import VolumeControl  # Điều chỉnh âm lượng
+from module_zoom import ZoomControl  # Điều chỉnh zoom
 
 # Khởi tạo webcam
 cap = cv2.VideoCapture(0)
@@ -86,9 +86,19 @@ def calculate_distance(landmarks):
     """Tính khoảng cách giữa ngón cái và ngón trỏ."""
     index_tip = landmarks.landmark[module_hand_tracking.mp_hands.HandLandmark.INDEX_FINGER_TIP]
     thumb_tip = landmarks.landmark[module_hand_tracking.mp_hands.HandLandmark.THUMB_TIP]
-    return ((index_tip.x - thumb_tip.x) ** 2 + (index_tip.y - thumb_tip.y) ** 2) ** 0.5
 
-# Khởi chạy ứng dụng
+    # Khoảng cách giữa ngón cái và ngón trỏ để xác định mức thay đổi
+    distance = ((index_tip.x - thumb_tip.x) ** 2 + (index_tip.y - thumb_tip.y) ** 2) ** 0.5
+     # Cập nhật màu sắc nút khi nhận diện cử chỉ
+    ui.update_button_color(gesture_name)
+    
+    if gesture_name == "thumbs_up":
+        volume_control.adjust_volume(distance)
+    elif gesture_name == "fist":
+        brightness_control.adjust_brightness(distance)
+    elif gesture_name == "open_palm":
+        zoom_control.adjust_zoom(distance)
+
 ui.run(update_video)
 cap.release()
 cv2.destroyAllWindows()

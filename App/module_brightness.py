@@ -16,9 +16,9 @@ class BrightnessControl:
 
         if distance > self.prev_distance + threshold:
             sbc.set_brightness(min(current_brightness + 5, 100))
-            print("Tăng độ sáng")
+            print("☀️ Tăng độ sáng")
         elif distance < self.prev_distance - threshold:
             sbc.set_brightness(max(current_brightness - 5, 0))
-            print("Giảm độ sáng")
+            print("🌙 Giảm độ sáng")
 
         self.prev_distance = distance
