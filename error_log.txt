@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "d:\Project\HandGesture_Community_Edition\App\main.py", line 15, in <module>
-    import module_ui
-  File "d:\Project\HandGesture_Community_Edition\App\module_ui.py", line 5, in <module>
-    from module_brightness import adjust_brightness
-ImportError: cannot import name 'adjust_brightness' from 'module_brightness' (d:\Project\HandGesture_Community_Edition\App\module_brightness.py)

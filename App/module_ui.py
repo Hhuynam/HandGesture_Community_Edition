@@ -1,4 +1,6 @@
+import os
 import tkinter as tk
+import webbrowser
 from PIL import Image, ImageTk
 import mediapipe as mp
 
@@ -47,7 +49,10 @@ class HandTrackingUI:
 
         self.btn_zoom = tk.Button(self.frame_control_panel, text="Zoom", font=("Arial", 12), bg="white", fg="black", command=self.adjust_zoom)
         self.btn_zoom.pack(pady=5, padx=10, fill="x")
-
+        
+        self.btn_open_web = tk.Button(self.frame_control_panel, text="Help", font=("Arial", 12), bg="Cyan", fg="black", command=self.open_web_app)
+        self.btn_open_web.pack(pady=5, padx=10, fill="x")
+        
         # Thêm hiệu ứng hover
         for btn in [self.btn_volume, self.btn_brightness, self.btn_zoom]:
             btn.bind("<Enter>", lambda e, b=btn: b.config(bg="gray", fg="white"))
@@ -63,6 +68,16 @@ class HandTrackingUI:
         self.canvas_feedback = tk.Canvas(self.frame_feedback, bg="lightblue")
         self.canvas_feedback.pack(padx=10, pady=10, fill="both", expand=True)
 
+    # Update the open_web_app method
+    def open_web_app(self):
+        try:
+            # URL của web app
+            web_url = "hahuynamtn.id.vn"  # Thay bằng URL thực tế của bạn
+            webbrowser.open(web_url)
+            print(f"Opened {web_url} in the default browser.")
+        except Exception as e:
+            print(f"Error opening web app: {e}")
+    
     def adjust_volume(self):
         """Xử lý khi nhấn nút Volume."""
         print("Adjusting Volume")
