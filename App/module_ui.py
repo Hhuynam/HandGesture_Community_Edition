@@ -1,5 +1,6 @@
-#module_ui.py
+import os
 import tkinter as tk
+import webbrowser
 from PIL import Image, ImageTk
 import mediapipe as mp
 
@@ -7,16 +8,11 @@ class HandTrackingUI:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Hand Gesture Control")
-        #self.root.geometry("860x550")
         self.root.geometry("1200x800")
         self.root.columnconfigure(0, weight=3)
         self.root.columnconfigure(1, weight=1)
         self.root.rowconfigure(0, weight=1)
         self.root.rowconfigure(1, weight=1)
-
-        # Đặt icon cho ứng dụng
-        icon_path = r"D:\Project\HandGesture_Community_Edition\Assets\logo\hand_gesture_logo.ico"
-        self.root.iconbitmap(icon_path)
 
         # Frame chứa video
         self.frame_video = tk.Frame(self.root, bg="black", bd=2, relief="sunken")
@@ -28,7 +24,7 @@ class HandTrackingUI:
         self.canvas_video = tk.Canvas(self.frame_video, bg="black")
         self.canvas_video.pack(fill="both", expand=True)
 
-        # Frame hướng dẫn user
+        # Frame hướng dẫn người dùng
         self.frame_guiding = tk.Frame(self.root, bg="orange", bd=2, relief="sunken")
         self.frame_guiding.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
 
@@ -53,13 +49,14 @@ class HandTrackingUI:
 
         self.btn_zoom = tk.Button(self.frame_control_panel, text="Zoom", font=("Arial", 12), bg="white", fg="black", command=self.adjust_zoom)
         self.btn_zoom.pack(pady=5, padx=10, fill="x")
-
+        
+        self.btn_open_web = tk.Button(self.frame_control_panel, text="Help", font=("Arial", 12), bg="Cyan", fg="black", command=self.open_web_app)
+        self.btn_open_web.pack(pady=5, padx=10, fill="x")
+        
         # Thêm hiệu ứng hover
         for btn in [self.btn_volume, self.btn_brightness, self.btn_zoom]:
             btn.bind("<Enter>", lambda e, b=btn: b.config(bg="gray", fg="white"))
             btn.bind("<Leave>", lambda e, b=btn: b.config(bg="white", fg="black"))
-            btn.bind("<ButtonPress>", lambda e, b=btn: b.config(bg="darkgray"))
-            btn.bind("<ButtonRelease>", lambda e, b=btn: b.config(bg="gray"))
 
         # Frame chứa feedback
         self.frame_feedback = tk.Frame(self.root, bg="lightblue", bd=2, relief="sunken")
@@ -70,23 +67,50 @@ class HandTrackingUI:
 
         self.canvas_feedback = tk.Canvas(self.frame_feedback, bg="lightblue")
         self.canvas_feedback.pack(padx=10, pady=10, fill="both", expand=True)
-        
+
+    # Update the open_web_app method
+    def open_web_app(self):
+        try:
+            # URL của web app
+            web_url = "hahuynamtn.id.vn"  # Thay bằng URL thực tế của bạn
+            webbrowser.open(web_url)
+            print(f"Opened {web_url} in the default browser.")
+        except Exception as e:
+            print(f"Error opening web app: {e}")
+    
     def adjust_volume(self):
+        """Xử lý khi nhấn nút Volume."""
         print("Adjusting Volume")
+        self.reset_button_colors()
+        self.btn_volume.config(bg="red", fg="white")
 
     def adjust_brightness(self):
+        """Xử lý khi nhấn nút Brightness."""
         print("Adjusting Brightness")
+        self.reset_button_colors()
+        self.btn_brightness.config(bg="red", fg="white")
 
     def adjust_zoom(self):
+        """Xử lý khi nhấn nút Zoom."""
         print("Adjusting Zoom")
+        self.reset_button_colors()
+        self.btn_zoom.config(bg="red", fg="white")
+
+    def reset_button_colors(self):
+        """Đặt lại màu sắc cho các nút về mặc định."""
+        self.btn_volume.config(bg="white", fg="black")
+        self.btn_brightness.config(bg="white", fg="black")
+        self.btn_zoom.config(bg="white", fg="black")
 
     def update_video_canvas(self, frame):
+        """Cập nhật khung video trên canvas."""
         img = Image.fromarray(frame)
         img_tk = ImageTk.PhotoImage(image=img)
         self.canvas_video.create_image(0, 0, anchor="nw", image=img_tk)
-        self.canvas_video.img_tk = img_tk  # Tránh bị mất ảnh
+        self.canvas_video.img_tk = img_tk  # Tránh mất ảnh do garbage collection
 
     def update_feedback_canvas(self, hand_landmarks):
+        """Hiển thị vị trí và kết nối bàn tay trên canvas feedback."""
         self.canvas_feedback.delete("all")
     
         width, height = self.canvas_feedback.winfo_width(), self.canvas_feedback.winfo_height()
@@ -113,22 +137,10 @@ class HandTrackingUI:
             self.canvas_feedback.create_line(sx, sy, ex, ey, fill="white", width=2)
 
     def update_gesture_info(self, gesture_name):
-        self.label_gesture_info.config(text=f"Hệ thống nhận diện: {gesture_name}", font=("Arial", 12, "bold"))
+        """Cập nhật thông tin cử chỉ trên giao diện."""
+        self.label_gesture_info.config(text=f"Nhận diện: {gesture_name}", font=("Arial", 12, "bold"))
 
-    def update_button_color(self, gesture_name):
-        """Cập nhật màu sắc của các nút điều khiển khi nhận diện cử chỉ"""
-        # Đặt lại màu nền các nút về mặc định
-        self.btn_volume.config(bg="white")
-        self.btn_brightness.config(bg="white")
-        self.btn_zoom.config(bg="white")
-
-        if gesture_name == "thumbs_up":
-            self.btn_volume.config(bg="red")  # Đổi màu nút Volume thành đỏ
-        elif gesture_name == "fist":
-            self.btn_brightness.config(bg="red")  # Đổi màu nút Brightness thành đỏ
-        elif gesture_name == "open_palm":
-            self.btn_zoom.config(bg="red")  # Đổi màu nút Zoom thành đỏ
-    
     def run(self, update_func):
+        """Chạy ứng dụng."""
         self.root.after(10, update_func)
         self.root.mainloop()

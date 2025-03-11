@@ -1,0 +1,27 @@
+/* File: style.css */
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.section {
+    margin-bottom: 30px;
+}
+
+.code-block {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 20px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-family: monospace;
+}
+
+h2 {
+    color: #0d6efd;
+}
+
+pre {
+    margin: 0;
+}
